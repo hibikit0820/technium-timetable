@@ -1,0 +1,788 @@
+<!doctype html>
+<html lang="ja">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <meta name="color-scheme" content="light" />
+  <title>TECHNIUM Global Conference 2026 | Timetable</title>
+  <style>
+    :root {
+      --ink: #262a35;
+      --muted: #8a91a5;
+      --line: #e5e8f0;
+      --panel: #f5f6fa;
+      --accent: #6f72f6;
+      --accent-soft: #f0f0ff;
+      --main: #6f72f6;
+      --room-a: #22a9b5;
+      --room-b: #d68a26;
+      --pitch: #259c62;
+      --poster: #cb4e8d;
+      --slot-height: 9px;
+      --radius: 12px;
+      --shadow: 0 7px 24px rgba(39, 44, 68, 0.07);
+      font-family: Inter, ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI",
+        "Hiragino Kaku Gothic ProN", "Hiragino Sans", "Yu Gothic", Meiryo, sans-serif;
+    }
+
+    * { box-sizing: border-box; }
+    html { background: #fff; }
+    body {
+      margin: 0;
+      color: var(--ink);
+      background: #fff;
+      -webkit-font-smoothing: antialiased;
+      text-rendering: optimizeLegibility;
+    }
+
+    button { font: inherit; }
+
+    .app {
+      width: min(1480px, 100%);
+      margin: 0 auto;
+      padding: 24px 24px 40px;
+    }
+
+    .eyebrow {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin: 0 0 10px;
+      color: var(--accent);
+      font-size: 12px;
+      font-weight: 800;
+      letter-spacing: .24em;
+    }
+
+    .eyebrow::before {
+      content: "";
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: var(--accent);
+    }
+
+    h1 {
+      margin: 0;
+      font-size: clamp(18px, 2vw, 25px);
+      line-height: 1.35;
+      letter-spacing: .02em;
+    }
+
+    .topbar {
+      display: flex;
+      align-items: flex-end;
+      justify-content: space-between;
+      gap: 18px;
+      margin-bottom: 18px;
+    }
+
+    .updated {
+      color: var(--muted);
+      font-size: 12px;
+      white-space: nowrap;
+    }
+
+    .day-tabs {
+      display: inline-flex;
+      gap: 0;
+      padding: 3px;
+      margin: 16px 0 12px;
+      border-radius: 16px;
+      background: #f1f2f6;
+    }
+
+    .day-tab {
+      appearance: none;
+      min-width: 170px;
+      padding: 14px 20px;
+      border: 0;
+      border-radius: 13px;
+      background: transparent;
+      color: #8c93a7;
+      cursor: pointer;
+      font-weight: 800;
+      letter-spacing: .02em;
+      transition: .18s ease;
+    }
+
+    .day-tab span { color: inherit; }
+    .day-tab .day-name { margin-right: 8px; color: var(--accent); }
+    .day-tab[aria-selected="true"] {
+      background: #fff;
+      color: var(--ink);
+      box-shadow: inset 0 0 0 2px var(--accent), 0 2px 9px rgba(66, 70, 105, .08);
+    }
+    .day-tab:not([aria-selected="true"]) .day-name { color: #9298aa; }
+
+    .day-meta {
+      margin: 0 0 18px;
+      color: #9299ae;
+      font-size: 13px;
+      font-weight: 700;
+      letter-spacing: .04em;
+    }
+
+    .mobile-track-tabs {
+      display: none;
+      gap: 8px;
+      overflow-x: auto;
+      padding: 2px 1px 10px;
+      scrollbar-width: none;
+    }
+    .mobile-track-tabs::-webkit-scrollbar { display: none; }
+
+    .track-tab {
+      flex: 0 0 auto;
+      border: 1px solid var(--line);
+      border-radius: 999px;
+      background: #fff;
+      padding: 9px 13px;
+      color: #687084;
+      font-size: 12px;
+      font-weight: 800;
+      cursor: pointer;
+    }
+    .track-tab[aria-selected="true"] {
+      border-color: var(--track-color);
+      color: var(--track-color);
+      background: color-mix(in srgb, var(--track-color) 8%, white);
+    }
+
+    .timeline-shell {
+      position: relative;
+      overflow: hidden;
+      border: 1px solid var(--line);
+      border-radius: 16px;
+      background: #fff;
+      box-shadow: var(--shadow);
+    }
+
+    .timeline-scroll {
+      overflow-x: auto;
+      overscroll-behavior-x: contain;
+      scrollbar-color: #c9ccda transparent;
+    }
+
+    .timeline-grid {
+      display: grid;
+      grid-template-rows: 42px 48px repeat(var(--slots), var(--slot-height));
+      min-width: 1040px;
+      position: relative;
+      background: #fff;
+    }
+
+    .venue {
+      z-index: 8;
+      margin: 7px 5px 4px;
+      padding: 8px 10px;
+      border-radius: 10px;
+      background: #f2f3f7;
+      color: #666e81;
+      text-align: center;
+      font-size: 12px;
+      font-weight: 800;
+      letter-spacing: .04em;
+      white-space: nowrap;
+    }
+
+    .track-head {
+      z-index: 8;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      padding: 8px 6px;
+      border-bottom: 1px solid var(--line);
+      background: rgba(255,255,255,.98);
+      color: #596174;
+      font-size: 12px;
+      font-weight: 800;
+      letter-spacing: .04em;
+      white-space: nowrap;
+    }
+
+    .track-dot {
+      width: 9px;
+      height: 9px;
+      border-radius: 3px;
+      background: var(--track-color);
+    }
+
+    .time-head {
+      z-index: 9;
+      grid-row: 1 / span 2;
+      display: flex;
+      align-items: flex-end;
+      justify-content: flex-end;
+      padding: 0 10px 12px 0;
+      border-bottom: 1px solid var(--line);
+      background: #fff;
+      color: #a0a6b8;
+      font-size: 10px;
+      font-weight: 700;
+    }
+
+    .track-bg {
+      z-index: 0;
+      border-left: 1px solid var(--line);
+      background: #fff;
+    }
+    .track-bg:last-of-type { border-right: 1px solid var(--line); }
+
+    .time-line {
+      z-index: 1;
+      align-self: start;
+      border-top: 1px solid var(--line);
+      pointer-events: none;
+    }
+    .time-line.hour { border-top-color: #d9dde7; }
+
+    .time-label {
+      z-index: 5;
+      align-self: start;
+      justify-self: stretch;
+      padding: 0 9px 0 0;
+      transform: translateY(-7px);
+      background: #fff;
+      color: #959caf;
+      text-align: right;
+      font-size: 11px;
+      font-variant-numeric: tabular-nums;
+      pointer-events: none;
+    }
+
+    .event {
+      z-index: 4;
+      min-height: 0;
+      margin: 3px 5px;
+      padding: 8px 10px;
+      border: 1px solid color-mix(in srgb, var(--track-color) 23%, #dfe2ec);
+      border-left: 3px solid var(--track-color);
+      border-radius: 10px;
+      background: color-mix(in srgb, var(--track-color) 7%, white);
+      color: var(--ink);
+      overflow: hidden;
+      cursor: pointer;
+      transition: transform .12s ease, box-shadow .12s ease, border-color .12s ease;
+    }
+    .event:hover,
+    .event:focus-visible {
+      z-index: 6;
+      outline: none;
+      transform: translateY(-1px);
+      border-color: color-mix(in srgb, var(--track-color) 50%, #dfe2ec);
+      box-shadow: 0 8px 18px rgba(43, 48, 72, .12);
+    }
+    .event.is-muted {
+      border-color: #dfe2ea;
+      border-left-color: #aeb4c3;
+      background: #f5f6f8;
+    }
+
+    .event-topline {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: 4px 6px;
+      margin-bottom: 4px;
+    }
+
+    .event-time {
+      color: var(--track-color);
+      font-size: 10.5px;
+      font-weight: 800;
+      font-variant-numeric: tabular-nums;
+    }
+    .is-muted .event-time { color: #7e8597; }
+
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      min-height: 18px;
+      padding: 2px 6px;
+      border: 1px solid #cfd3df;
+      background: rgba(255,255,255,.8);
+      color: #697184;
+      font-size: 9px;
+      font-weight: 800;
+      line-height: 1;
+      letter-spacing: .02em;
+      white-space: nowrap;
+    }
+
+    .badge.lang {
+      border-color: #8b93a4;
+      background: #8b93a4;
+      color: #fff;
+    }
+
+    .event-title {
+      display: -webkit-box;
+      overflow: hidden;
+      -webkit-box-orient: vertical;
+      -webkit-line-clamp: 4;
+      font-size: 12.5px;
+      font-weight: 800;
+      line-height: 1.32;
+      overflow-wrap: anywhere;
+    }
+
+    .event-area {
+      display: inline-flex;
+      margin-top: 6px;
+      padding: 3px 8px;
+      border-radius: 999px;
+      background: #8790a1;
+      color: #fff;
+      font-size: 9px;
+      font-weight: 800;
+    }
+
+    .event-list {
+      margin: 6px 0 0;
+      padding: 0;
+      list-style: none;
+      color: #687083;
+      font-size: 10.5px;
+      line-height: 1.35;
+    }
+    .event-list li::before { content: "・"; }
+
+    .legend {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px 14px;
+      margin: 14px 4px 0;
+      color: #747b8e;
+      font-size: 11px;
+    }
+    .legend-item { display: inline-flex; align-items: center; gap: 6px; }
+    .legend-dot { width: 8px; height: 8px; border-radius: 3px; background: var(--track-color); }
+
+    .footnote {
+      margin: 12px 4px 0;
+      color: #8a91a5;
+      font-size: 11px;
+      line-height: 1.6;
+    }
+
+    .modal {
+      position: fixed;
+      inset: 0;
+      z-index: 100;
+      display: none;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+      background: rgba(26, 29, 40, .38);
+      backdrop-filter: blur(3px);
+    }
+    .modal.is-open { display: flex; }
+    .modal-card {
+      width: min(580px, 100%);
+      max-height: min(720px, 88vh);
+      overflow: auto;
+      border-radius: 18px;
+      background: #fff;
+      padding: 22px;
+      box-shadow: 0 24px 80px rgba(22, 26, 42, .25);
+    }
+    .modal-close {
+      float: right;
+      width: 34px;
+      height: 34px;
+      border: 0;
+      border-radius: 50%;
+      background: #f1f2f6;
+      color: #626a7e;
+      cursor: pointer;
+      font-size: 20px;
+      line-height: 1;
+    }
+    .modal-kicker {
+      margin: 0 44px 10px 0;
+      color: var(--track-color, var(--accent));
+      font-size: 12px;
+      font-weight: 800;
+      letter-spacing: .05em;
+    }
+    .modal-title {
+      margin: 0;
+      font-size: clamp(18px, 4vw, 24px);
+      line-height: 1.45;
+    }
+    .modal-badges { display: flex; flex-wrap: wrap; gap: 6px; margin: 14px 0; }
+    .modal-list { margin: 14px 0 0; padding-left: 1.2em; color: #596174; line-height: 1.8; }
+
+    @media (max-width: 860px) {
+      :root { --slot-height: 10px; }
+      .app { padding: 18px 12px 30px; }
+      .topbar { align-items: flex-start; }
+      .updated { display: none; }
+      .day-tabs { display: flex; width: 100%; }
+      .day-tab { min-width: 0; flex: 1 1 0; padding: 12px 7px; font-size: 13px; }
+      .mobile-track-tabs { display: flex; }
+      .timeline-shell { border-radius: 13px; }
+      .timeline-grid { min-width: 0; width: 100%; }
+      .timeline-scroll { overflow-x: hidden; }
+      .event { margin: 3px 6px; padding: 8px 9px; }
+      .event-title { font-size: 12px; -webkit-line-clamp: 3; }
+      .venue { font-size: 10px; overflow: hidden; text-overflow: ellipsis; }
+      .track-head { font-size: 11px; }
+      .legend { display: none; }
+      .modal { align-items: flex-end; padding: 0; }
+      .modal-card {
+        width: 100%;
+        max-height: 82vh;
+        border-radius: 20px 20px 0 0;
+        padding: 20px 18px calc(22px + env(safe-area-inset-bottom));
+      }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      * { scroll-behavior: auto !important; transition: none !important; }
+    }
+  </style>
+</head>
+<body>
+  <main class="app">
+    <div class="topbar">
+      <div>
+        <p class="eyebrow">TIMETABLE</p>
+        <h1>TECHNIUM Global Conference 2026</h1>
+      </div>
+      <div class="updated">Updated 2026.7.28</div>
+    </div>
+
+    <div class="day-tabs" role="tablist" aria-label="開催日">
+      <button class="day-tab" role="tab" data-day="day1" aria-selected="true">
+        <span class="day-name">DAY1</span><span>2026.9.2</span>
+      </button>
+      <button class="day-tab" role="tab" data-day="day2" aria-selected="false">
+        <span class="day-name">DAY2</span><span>2026.9.3</span>
+      </button>
+    </div>
+
+    <p id="dayMeta" class="day-meta"></p>
+    <div id="mobileTrackTabs" class="mobile-track-tabs" role="tablist" aria-label="会場・プログラム"></div>
+
+    <section class="timeline-shell" aria-label="タイムテーブル">
+      <div class="timeline-scroll">
+        <div id="timeline" class="timeline-grid"></div>
+      </div>
+    </section>
+
+    <div id="legend" class="legend"></div>
+    <p class="footnote">セッション内容・時間は変更となる場合があります。最新情報はEventHubおよび当日のご案内をご確認ください。</p>
+  </main>
+
+  <div id="modal" class="modal" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
+    <div class="modal-card">
+      <button id="modalClose" class="modal-close" aria-label="閉じる">×</button>
+      <p id="modalKicker" class="modal-kicker"></p>
+      <h2 id="modalTitle" class="modal-title"></h2>
+      <div id="modalBadges" class="modal-badges"></div>
+      <ul id="modalList" class="modal-list"></ul>
+    </div>
+  </div>
+
+  <script>
+    // ============================================================
+    // TIMETABLE DATA
+    // 時刻・タイトル変更は、以下の event オブジェクトを編集してください。
+    // track: main | roomA | roomB | pitch | poster
+    // ============================================================
+    const tracks = [
+      { id: 'main', label: 'MAIN', venue: 'CERULEAN TOWER TOKYU HOTEL B2F', color: '#6f72f6' },
+      { id: 'roomA', label: 'ROOM A', venue: 'CERULEAN TOWER TOKYU HOTEL B2F', color: '#22a9b5' },
+      { id: 'roomB', label: 'ROOM B', venue: 'CERULEAN TOWER TOKYU HOTEL B2F', color: '#d68a26' },
+      { id: 'pitch', label: 'PITCH 1・2', venue: 'SAKURA DEEPTECH SHIBUYA', color: '#259c62' },
+      { id: 'poster', label: 'POSTER', venue: 'SAKURA DEEPTECH SHIBUYA', color: '#cb4e8d' },
+    ];
+
+    const showcaseCategories = [
+      'Medical & Healthcare',
+      'Drug Discovery & Biotechnology',
+      'Agriculture & Food',
+      'Advanced Technology',
+      'Climate',
+    ];
+
+    const days = {
+      day1: {
+        dateText: 'DAY1 ／ 2026.9.2 (Wed) 12:30–19:00',
+        start: '12:30',
+        end: '19:00',
+        events: [
+          { track: 'main', start: '13:10', end: '13:45', kind: 'SESSION', lang: 'JP', title: '日本のディープテック投資の現在地：トップティアVCが展望する2026年のトレンドと戦略領域' },
+          { track: 'main', start: '14:00', end: '14:45', kind: 'SESSION', title: 'TBA', muted: true },
+          { track: 'main', start: '15:00', end: '15:45', kind: 'SESSION', lang: 'EN', title: 'Why Japan, Really? Global Funds Speak Frankly / Alumni Ventures x Pangaea Ventures' },
+          { track: 'main', start: '16:00', end: '16:45', kind: 'SESSION', lang: 'JP', title: '米国本社で戦うという選択：米国在住起業家の実務と本音' },
+          { track: 'main', start: '17:00', end: '17:45', kind: 'SESSION', lang: 'JP', title: 'TBA', muted: true },
+
+          { track: 'roomA', start: '13:45', end: '14:45', kind: 'SESSION', lang: 'JP', title: '日本成長戦略セッション', area: 'Life Tech' },
+          { track: 'roomA', start: '14:55', end: '15:40', kind: 'SESSION', title: 'TBA', muted: true },
+          { track: 'roomA', start: '15:50', end: '16:25', kind: 'SESSION', lang: 'JP', title: 'TBA', muted: true },
+          { track: 'roomA', start: '16:50', end: '17:30', kind: 'NETWORKING', lang: 'JP/EN', title: '交流会', area: '資金調達' },
+
+          { track: 'roomB', start: '13:45', end: '14:45', kind: 'SESSION', lang: 'JP', title: '日本成長戦略セッション', area: 'Space & Mobility Tech' },
+          { track: 'roomB', start: '14:55', end: '15:40', kind: 'SESSION', title: 'TBA', muted: true },
+          { track: 'roomB', start: '15:50', end: '16:25', kind: 'SESSION', lang: 'JP', title: 'ディープテックの入口戦略と出口戦略' },
+          { track: 'roomB', start: '16:50', end: '17:30', kind: 'NETWORKING', lang: 'JP/EN', title: '交流会', area: 'オープンイノベーション' },
+
+          { track: 'pitch', start: '13:00', end: '17:00', kind: 'Showcase', lang: 'JP/EN', title: 'スタートアップピッチ', bullets: showcaseCategories },
+          { track: 'poster', start: '12:30', end: '17:00', kind: 'Showcase', lang: 'JP/EN', title: '創業前シーズ ポスター展示', bullets: showcaseCategories },
+          { track: 'poster', start: '17:00', end: '18:00', kind: 'CORE TIME', title: 'ポスター前で発表者と対話できる交流時間', bullets: showcaseCategories },
+        ],
+      },
+      day2: {
+        dateText: 'DAY2 ／ 2026.9.3 (Thu) 9:30–19:00',
+        start: '09:30',
+        end: '19:00',
+        events: [
+          { track: 'main', start: '09:30', end: '10:15', kind: 'SESSION', lang: 'JP', title: '大手企業がディープテックスタートアップとの事業共創推進を加速させるには？' },
+          { track: 'main', start: '10:30', end: '11:15', kind: 'SESSION', lang: 'JP', title: 'ガバナンスセッション' },
+          { track: 'main', start: '11:30', end: '12:15', kind: 'SESSION', lang: 'JP', title: '研究室から上場企業へ：研究者起業家が拓く大学発スタートアップの可能性' },
+          { track: 'main', start: '12:30', end: '13:15', kind: 'SESSION', lang: 'JP', title: 'AIで産業をつくり直す' },
+          { track: 'main', start: '13:30', end: '14:15', kind: 'SESSION', lang: 'JP', title: '最高峰アカデミアが創る未来：ディープテックを社会実装する「知のグランドデザイン」' },
+          { track: 'main', start: '14:30', end: '15:15', kind: 'SESSION', lang: 'JP', title: '国内外の産業地図を塗り替える「未上場ユニコーン」の野心：グローバル実装への最短経路と資本戦略' },
+          { track: 'main', start: '15:30', end: '16:15', kind: 'SESSION', title: 'TBA', muted: true },
+          { track: 'main', start: '16:30', end: '17:15', kind: 'SESSION', lang: 'JP', title: '日本発ディープテック・ユニコーンの凱旋：上場後の「非連続な成長」とグローバル市場での勝ち筋' },
+          { track: 'main', start: '17:20', end: '17:30', kind: 'CLOSING', title: 'Closing' },
+
+          { track: 'roomA', start: '09:30', end: '10:30', kind: 'SESSION', lang: 'JP', title: '日本成長戦略セッション', area: 'Defense Tech' },
+          { track: 'roomA', start: '10:40', end: '11:25', kind: 'SESSION', title: 'TBA', muted: true },
+          { track: 'roomA', start: '11:35', end: '12:10', kind: 'SESSION', title: 'TBA', muted: true },
+          { track: 'roomA', start: '12:25', end: '13:25', kind: 'SESSION', title: 'インド特別セッション' },
+          { track: 'roomA', start: '13:40', end: '14:40', kind: 'SESSION', lang: 'JP', title: '日本成長戦略セッション', area: 'Intelligence Tech' },
+          { track: 'roomA', start: '14:50', end: '15:35', kind: 'SESSION', title: 'TBA', muted: true },
+          { track: 'roomA', start: '15:45', end: '16:20', kind: 'SESSION', lang: 'JP', title: 'りそなパートナーセッション' },
+          { track: 'roomA', start: '16:50', end: '17:30', kind: 'NETWORKING', lang: 'JP/EN', title: '交流会', area: '資金調達' },
+
+          { track: 'roomB', start: '09:30', end: '10:30', kind: 'SESSION', lang: 'JP', title: '日本成長戦略セッション', area: 'Sustain Tech' },
+          { track: 'roomB', start: '10:40', end: '11:25', kind: 'SESSION', title: 'TBA', muted: true },
+          { track: 'roomB', start: '11:35', end: '12:10', kind: 'SESSION', lang: 'JP', title: 'Mizkan Holdings パートナーセッション' },
+          { track: 'roomB', start: '12:25', end: '13:25', kind: 'SESSION', title: 'ベンチャーデット Gateway' },
+          { track: 'roomB', start: '13:40', end: '14:40', kind: 'SESSION', lang: 'JP', title: '日本成長戦略セッション', area: 'Core Tech' },
+          { track: 'roomB', start: '14:50', end: '15:35', kind: 'SESSION', title: '住友商事パートナーセッション' },
+          { track: 'roomB', start: '15:45', end: '16:20', kind: 'SESSION', lang: 'JP', title: '内田・鮫島法律事務所 パートナーセッション' },
+          { track: 'roomB', start: '16:50', end: '17:30', kind: 'NETWORKING', lang: 'JP/EN', title: '交流会', area: 'オープンイノベーション' },
+
+          { track: 'pitch', start: '10:30', end: '17:10', kind: 'Showcase', lang: 'JP/EN', title: 'スタートアップピッチ', bullets: showcaseCategories },
+          { track: 'poster', start: '09:30', end: '17:00', kind: 'Showcase', lang: 'JP/EN', title: '創業前シーズ ポスター展示', bullets: showcaseCategories },
+          { track: 'poster', start: '17:00', end: '18:00', kind: 'CORE TIME', title: 'ポスター前で発表者と対話できる交流時間', bullets: showcaseCategories },
+        ],
+      },
+    };
+
+    const timeline = document.getElementById('timeline');
+    const dayMeta = document.getElementById('dayMeta');
+    const dayTabs = [...document.querySelectorAll('.day-tab')];
+    const mobileTrackTabs = document.getElementById('mobileTrackTabs');
+    const legend = document.getElementById('legend');
+    const modal = document.getElementById('modal');
+    const modalClose = document.getElementById('modalClose');
+    const modalKicker = document.getElementById('modalKicker');
+    const modalTitle = document.getElementById('modalTitle');
+    const modalBadges = document.getElementById('modalBadges');
+    const modalList = document.getElementById('modalList');
+
+    let currentDay = 'day1';
+    let selectedTrack = 'main';
+    let lastFocusedEvent = null;
+    const mobileMq = window.matchMedia('(max-width: 860px)');
+
+    function toMinutes(time) {
+      const [h, m] = time.split(':').map(Number);
+      return h * 60 + m;
+    }
+
+    function makeEl(tag, className, text) {
+      const el = document.createElement(tag);
+      if (className) el.className = className;
+      if (text !== undefined) el.textContent = text;
+      return el;
+    }
+
+    function visibleTracks() {
+      return mobileMq.matches ? tracks.filter(t => t.id === selectedTrack) : tracks;
+    }
+
+    function renderMobileTabs() {
+      mobileTrackTabs.innerHTML = '';
+      tracks.forEach(track => {
+        const btn = makeEl('button', 'track-tab', track.label);
+        btn.type = 'button';
+        btn.dataset.track = track.id;
+        btn.setAttribute('role', 'tab');
+        btn.setAttribute('aria-selected', String(track.id === selectedTrack));
+        btn.style.setProperty('--track-color', track.color);
+        btn.addEventListener('click', () => {
+          selectedTrack = track.id;
+          renderMobileTabs();
+          renderTimeline();
+        });
+        mobileTrackTabs.appendChild(btn);
+      });
+    }
+
+    function renderLegend() {
+      legend.innerHTML = '';
+      tracks.forEach(track => {
+        const item = makeEl('span', 'legend-item');
+        item.style.setProperty('--track-color', track.color);
+        item.append(makeEl('span', 'legend-dot'), document.createTextNode(track.label));
+        legend.appendChild(item);
+      });
+    }
+
+    function addVenueHeaders(grid, shownTracks) {
+      let groupStart = 0;
+      while (groupStart < shownTracks.length) {
+        const venue = shownTracks[groupStart].venue;
+        let groupEnd = groupStart + 1;
+        while (groupEnd < shownTracks.length && shownTracks[groupEnd].venue === venue) groupEnd++;
+        const el = makeEl('div', 'venue', venue);
+        el.style.gridRow = '1';
+        el.style.gridColumn = `${groupStart + 2} / ${groupEnd + 2}`;
+        grid.appendChild(el);
+        groupStart = groupEnd;
+      }
+    }
+
+    function eventCard(event, track, colIndex, startRow, endRow) {
+      const card = makeEl('button', `event${event.muted ? ' is-muted' : ''}`);
+      card.type = 'button';
+      card.style.gridColumn = String(colIndex + 2);
+      card.style.gridRow = `${startRow} / ${endRow}`;
+      card.style.setProperty('--track-color', track.color);
+      card.setAttribute('aria-label', `${event.start}から${event.end}、${track.label}、${event.title}`);
+
+      const top = makeEl('div', 'event-topline');
+      top.appendChild(makeEl('span', 'event-time', `${event.start}–${event.end}`));
+      if (event.kind) top.appendChild(makeEl('span', 'badge', event.kind));
+      if (event.lang) top.appendChild(makeEl('span', 'badge lang', event.lang));
+      card.appendChild(top);
+      card.appendChild(makeEl('div', 'event-title', event.title));
+      if (event.area) card.appendChild(makeEl('div', 'event-area', event.area));
+      if (event.bullets) {
+        const ul = makeEl('ul', 'event-list');
+        event.bullets.forEach(item => ul.appendChild(makeEl('li', '', item)));
+        card.appendChild(ul);
+      }
+
+      card.addEventListener('click', () => openModal(event, track, card));
+      return card;
+    }
+
+    function renderTimeline() {
+      const day = days[currentDay];
+      const shownTracks = visibleTracks();
+      const startMin = toMinutes(day.start);
+      const endMin = toMinutes(day.end);
+      const slots = (endMin - startMin) / 5;
+
+      dayMeta.textContent = day.dateText;
+      timeline.innerHTML = '';
+      timeline.style.setProperty('--slots', slots);
+      timeline.style.gridTemplateColumns = `64px repeat(${shownTracks.length}, minmax(0, 1fr))`;
+      timeline.style.minWidth = mobileMq.matches ? '0' : `${64 + shownTracks.length * 205}px`;
+
+      const timeHead = makeEl('div', 'time-head', 'GMT+9');
+      timeHead.style.gridColumn = '1';
+      timeline.appendChild(timeHead);
+
+      addVenueHeaders(timeline, shownTracks);
+
+      shownTracks.forEach((track, idx) => {
+        const head = makeEl('div', 'track-head');
+        head.style.gridColumn = String(idx + 2);
+        head.style.gridRow = '2';
+        head.style.setProperty('--track-color', track.color);
+        head.append(makeEl('span', 'track-dot'), document.createTextNode(track.label));
+        timeline.appendChild(head);
+
+        const bg = makeEl('div', 'track-bg');
+        bg.style.gridColumn = String(idx + 2);
+        bg.style.gridRow = `3 / span ${slots}`;
+        timeline.appendChild(bg);
+      });
+
+      for (let min = startMin; min <= endMin; min += 30) {
+        const slot = (min - startMin) / 5;
+        const row = 3 + slot;
+        const hour = Math.floor(min / 60);
+        const minute = min % 60;
+        const label = `${String(hour).padStart(2, '0')}:${String(minute).padStart(2, '0')}`;
+
+        const line = makeEl('div', `time-line${minute === 0 ? ' hour' : ''}`);
+        line.style.gridColumn = `1 / ${shownTracks.length + 2}`;
+        line.style.gridRow = String(row);
+        timeline.appendChild(line);
+
+        const timeLabel = makeEl('div', 'time-label', label);
+        timeLabel.style.gridColumn = '1';
+        timeLabel.style.gridRow = String(row);
+        timeline.appendChild(timeLabel);
+      }
+
+      day.events.forEach(event => {
+        const trackIndex = shownTracks.findIndex(t => t.id === event.track);
+        if (trackIndex < 0) return;
+        const startSlot = (toMinutes(event.start) - startMin) / 5;
+        const endSlot = (toMinutes(event.end) - startMin) / 5;
+        const startRow = 3 + startSlot;
+        const endRow = 3 + endSlot;
+        timeline.appendChild(eventCard(event, shownTracks[trackIndex], trackIndex, startRow, endRow));
+      });
+    }
+
+    function openModal(event, track, trigger) {
+      lastFocusedEvent = trigger;
+      modal.style.setProperty('--track-color', track.color);
+      modalKicker.textContent = `${event.start}–${event.end} ／ ${track.label} ／ ${track.venue}`;
+      modalTitle.textContent = event.title;
+      modalBadges.innerHTML = '';
+      [event.kind, event.lang, event.area].filter(Boolean).forEach((text, idx) => {
+        const badge = makeEl('span', `badge${idx === 1 && event.lang ? ' lang' : ''}`, text);
+        modalBadges.appendChild(badge);
+      });
+      modalList.innerHTML = '';
+      (event.bullets || []).forEach(item => modalList.appendChild(makeEl('li', '', item)));
+      modalList.style.display = event.bullets?.length ? '' : 'none';
+      modal.classList.add('is-open');
+      document.body.style.overflow = 'hidden';
+      modalClose.focus();
+    }
+
+    function closeModal() {
+      modal.classList.remove('is-open');
+      document.body.style.overflow = '';
+      if (lastFocusedEvent) lastFocusedEvent.focus();
+    }
+
+    dayTabs.forEach(tab => {
+      tab.addEventListener('click', () => {
+        currentDay = tab.dataset.day;
+        dayTabs.forEach(t => t.setAttribute('aria-selected', String(t === tab)));
+        renderTimeline();
+      });
+    });
+
+    modalClose.addEventListener('click', closeModal);
+    modal.addEventListener('click', e => { if (e.target === modal) closeModal(); });
+    document.addEventListener('keydown', e => { if (e.key === 'Escape' && modal.classList.contains('is-open')) closeModal(); });
+
+    let resizeTimer;
+    window.addEventListener('resize', () => {
+      clearTimeout(resizeTimer);
+      resizeTimer = setTimeout(renderTimeline, 120);
+    });
+
+    renderMobileTabs();
+    renderLegend();
+    renderTimeline();
+  </script>
+</body>
+</html>
