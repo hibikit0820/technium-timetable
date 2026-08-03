@@ -77,6 +77,32 @@
       margin-bottom: 18px;
     }
 
+
+    .top-actions {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+    }
+
+    .language-switch {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      color: #a0a6b8;
+      font-size: 11px;
+      font-weight: 800;
+      letter-spacing: .05em;
+    }
+
+    .lang-link {
+      color: #9299ae;
+      text-decoration: none;
+      transition: color .15s ease;
+    }
+    .lang-link:hover,
+    .lang-link:focus-visible { color: var(--accent); }
+    .lang-link.is-active { color: var(--ink); }
+
     .updated {
       color: var(--muted);
       font-size: 12px;
@@ -250,6 +276,12 @@
       font-size: 11px;
       font-variant-numeric: tabular-nums;
       pointer-events: none;
+    }
+
+    /* The first time label sits on the top edge of the timetable.
+       Keep it inside the frame so it is not clipped by overflow:hidden. */
+    .time-label.is-first {
+      transform: translateY(2px);
     }
 
     .event {
@@ -452,7 +484,14 @@
         <p class="eyebrow">TIMETABLE</p>
         <h1>TECHNIUM Global Conference 2026</h1>
       </div>
-      <div class="updated">Updated 2026.7.28</div>
+      <div class="top-actions">
+        <nav class="language-switch" aria-label="言語切替">
+          <a class="lang-link is-active" href="./" aria-current="page">JP</a>
+          <span>/</span>
+          <a class="lang-link" href="./en/">EN</a>
+        </nav>
+        <div class="updated">Updated 2026.8.3</div>
+      </div>
     </div>
 
     <div class="day-tabs" role="tablist" aria-label="開催日">
@@ -511,8 +550,8 @@
 
     const days = {
       day1: {
-        dateText: 'DAY1 ／ 2026.9.2 (Wed) 12:30–19:00',
-        start: '12:30',
+        dateText: 'DAY1 ／ 2026.9.2 (Wed) 09:30–19:00',
+        start: '09:30',
         end: '19:00',
         events: [
           { track: 'main', start: '13:10', end: '13:45', kind: 'SESSION', lang: 'JP', title: '日本のディープテック投資の現在地：トップティアVCが展望する2026年のトレンドと戦略領域' },
@@ -524,15 +563,15 @@
           { track: 'roomA', start: '13:45', end: '14:45', kind: 'SESSION', lang: 'JP', title: '日本成長戦略セッション', area: 'Life Tech' },
           { track: 'roomA', start: '14:55', end: '15:40', kind: 'SESSION', title: 'TBA', muted: true },
           { track: 'roomA', start: '15:50', end: '16:25', kind: 'SESSION', lang: 'JP', title: 'TBA', muted: true },
-          { track: 'roomA', start: '16:50', end: '17:30', kind: 'NETWORKING', lang: 'JP/EN', title: '交流会', area: '資金調達' },
+          { track: 'roomA', start: '16:50', end: '17:50', kind: 'NETWORKING', lang: 'JP/EN', title: '交流会', area: '資金調達' },
 
           { track: 'roomB', start: '13:45', end: '14:45', kind: 'SESSION', lang: 'JP', title: '日本成長戦略セッション', area: 'Space & Mobility Tech' },
           { track: 'roomB', start: '14:55', end: '15:40', kind: 'SESSION', title: 'TBA', muted: true },
           { track: 'roomB', start: '15:50', end: '16:25', kind: 'SESSION', lang: 'JP', title: 'ディープテックの入口戦略と出口戦略' },
-          { track: 'roomB', start: '16:50', end: '17:30', kind: 'NETWORKING', lang: 'JP/EN', title: '交流会', area: 'オープンイノベーション' },
+          { track: 'roomB', start: '16:50', end: '17:50', kind: 'NETWORKING', lang: 'JP/EN', title: '交流会', area: 'オープンイノベーション' },
 
           { track: 'pitch', start: '13:00', end: '17:00', kind: 'Showcase', lang: 'JP/EN', title: 'スタートアップピッチ', bullets: showcaseCategories },
-          { track: 'poster', start: '12:30', end: '17:00', kind: 'Showcase', lang: 'JP/EN', title: '創業前シーズ ポスター展示', bullets: showcaseCategories },
+          { track: 'poster', start: '09:30', end: '17:00', kind: 'Showcase', lang: 'JP/EN', title: '創業前シーズ ポスター展示', bullets: showcaseCategories },
           { track: 'poster', start: '17:00', end: '18:00', kind: 'CORE TIME', title: 'ポスター前で発表者と対話できる交流時間', bullets: showcaseCategories },
         ],
       },
@@ -558,7 +597,7 @@
           { track: 'roomA', start: '13:40', end: '14:40', kind: 'SESSION', lang: 'JP', title: '日本成長戦略セッション', area: 'Intelligence Tech' },
           { track: 'roomA', start: '14:50', end: '15:35', kind: 'SESSION', title: 'TBA', muted: true },
           { track: 'roomA', start: '15:45', end: '16:20', kind: 'SESSION', lang: 'JP', title: 'りそなパートナーセッション' },
-          { track: 'roomA', start: '16:50', end: '17:30', kind: 'NETWORKING', lang: 'JP/EN', title: '交流会', area: '資金調達' },
+          { track: 'roomA', start: '16:50', end: '17:50', kind: 'NETWORKING', lang: 'JP/EN', title: '交流会', area: '資金調達' },
 
           { track: 'roomB', start: '09:30', end: '10:30', kind: 'SESSION', lang: 'JP', title: '日本成長戦略セッション', area: 'Sustain Tech' },
           { track: 'roomB', start: '10:40', end: '11:25', kind: 'SESSION', title: 'TBA', muted: true },
@@ -567,7 +606,7 @@
           { track: 'roomB', start: '13:40', end: '14:40', kind: 'SESSION', lang: 'JP', title: '日本成長戦略セッション', area: 'Core Tech' },
           { track: 'roomB', start: '14:50', end: '15:35', kind: 'SESSION', title: '住友商事パートナーセッション' },
           { track: 'roomB', start: '15:45', end: '16:20', kind: 'SESSION', lang: 'JP', title: '内田・鮫島法律事務所 パートナーセッション' },
-          { track: 'roomB', start: '16:50', end: '17:30', kind: 'NETWORKING', lang: 'JP/EN', title: '交流会', area: 'オープンイノベーション' },
+          { track: 'roomB', start: '16:50', end: '17:50', kind: 'NETWORKING', lang: 'JP/EN', title: '交流会', area: 'オープンイノベーション' },
 
           { track: 'pitch', start: '10:30', end: '17:10', kind: 'Showcase', lang: 'JP/EN', title: 'スタートアップピッチ', bullets: showcaseCategories },
           { track: 'poster', start: '09:30', end: '17:00', kind: 'Showcase', lang: 'JP/EN', title: '創業前シーズ ポスター展示', bullets: showcaseCategories },
@@ -722,6 +761,7 @@
         timeline.appendChild(line);
 
         const timeLabel = makeEl('div', 'time-label', label);
+        if (min === startMin) timeLabel.classList.add('is-first');
         timeLabel.style.gridColumn = '1';
         timeLabel.style.gridRow = String(row);
         timeline.appendChild(timeLabel);
