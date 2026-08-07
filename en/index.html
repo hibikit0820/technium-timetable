@@ -278,6 +278,11 @@
       pointer-events: none;
     }
 
+    /* Keep the first time label inside the frame so it is not clipped. */
+    .time-label.is-first {
+      transform: translateY(2px);
+    }
+
     .event {
       z-index: 4;
       min-height: 0;
@@ -375,6 +380,14 @@
     }
     .event-list li::before { content: "• "; }
 
+    .event-note {
+      margin-top: 8px;
+      color: #687083;
+      font-size: 10px;
+      font-weight: 600;
+      line-height: 1.45;
+    }
+
     .legend {
       display: flex;
       flex-wrap: wrap;
@@ -439,6 +452,7 @@
       line-height: 1.45;
     }
     .modal-badges { display: flex; flex-wrap: wrap; gap: 6px; margin: 14px 0; }
+    .modal-note { display: none; margin: 14px 0 0; padding: 10px 12px; border-radius: 10px; background: #f4f5f8; color: #596174; font-size: 13px; line-height: 1.6; }
     .modal-list { margin: 14px 0 0; padding-left: 1.2em; color: #596174; line-height: 1.8; }
 
     @media (max-width: 860px) {
@@ -516,6 +530,7 @@
       <p id="modalKicker" class="modal-kicker"></p>
       <h2 id="modalTitle" class="modal-title"></h2>
       <div id="modalBadges" class="modal-badges"></div>
+      <p id="modalNote" class="modal-note"></p>
       <ul id="modalList" class="modal-list"></ul>
     </div>
   </div>
@@ -544,9 +559,9 @@
 
     const days = {
       day1: {
-        dateText: 'DAY1 / 2026.9.2 (Wed) 09:30–19:00',
+        dateText: 'DAY1 / 2026.9.2 (Wed) 09:30–20:30',
         start: '09:30',
-        end: '19:00',
+        end: '20:30',
         events: [
           { track: 'main', start: '13:10', end: '13:45', kind: 'SESSION', lang: 'JP', title: "Japan's Deep Tech Investment Landscape: Top-Tier VCs on the 2026 Trends and Strategic Frontiers" },
           { track: 'main', start: '14:00', end: '14:45', kind: 'SESSION', title: 'TBA', muted: true },
@@ -566,14 +581,15 @@
 
           { track: 'pitch', start: '13:00', end: '15:00', kind: 'Showcase', lang: 'JP/EN', title: 'Startup Pitches', bullets: showcaseCategories },
           { track: 'pitch', start: '15:00', end: '17:00', kind: 'Showcase', lang: 'JP/EN', title: 'AgriFood SBIR: Go Global 2026 ～Discover the Frontier of Japanese AgriFood Tech Innovation～' },
+          { track: 'pitch', start: '18:30', end: '20:30', kind: 'SIDE EVENT', title: 'TECH SEEDS MEETUP', note: 'This event requires advance registration. Please refrain from attending unless you have received an invitation.' },
           { track: 'poster', start: '09:30', end: '17:00', kind: 'Showcase', lang: 'JP/EN', title: 'Pre-Startup Research Seeds Poster Exhibition', bullets: showcaseCategories },
           { track: 'poster', start: '17:00', end: '18:00', kind: 'CORE TIME', title: 'Core Time: Meet and Talk with Presenters at Their Posters', bullets: showcaseCategories },
         ],
       },
       day2: {
-        dateText: 'DAY2 / 2026.9.3 (Thu) 09:30–19:00',
+        dateText: 'DAY2 / 2026.9.3 (Thu) 09:30–20:30',
         start: '09:30',
-        end: '19:00',
+        end: '20:30',
         events: [
           { track: 'main', start: '09:30', end: '10:15', kind: 'SESSION', lang: 'JP', title: 'How Can Large Corporations Accelerate Business Co-Creation with Deep Tech Startups?' },
           { track: 'main', start: '10:30', end: '11:15', kind: 'SESSION', lang: 'JP', title: 'Governance Session' },
@@ -604,6 +620,7 @@
           { track: 'roomB', start: '16:50', end: '17:50', kind: 'NETWORKING', lang: 'JP/EN', title: 'Networking', area: 'Open Innovation' },
 
           { track: 'pitch', start: '10:30', end: '17:10', kind: 'Showcase', lang: 'JP/EN', title: 'Startup Pitches', bullets: showcaseCategories },
+          { track: 'pitch', start: '18:30', end: '20:30', kind: 'SIDE EVENT', title: 'TECH SEEDS MEETUP', note: 'This event requires advance registration. Please refrain from attending unless you have received an invitation.' },
           { track: 'poster', start: '09:30', end: '17:00', kind: 'Showcase', lang: 'JP/EN', title: 'Pre-Startup Research Seeds Poster Exhibition', bullets: showcaseCategories },
           { track: 'poster', start: '17:00', end: '18:00', kind: 'CORE TIME', title: 'Core Time: Meet and Talk with Presenters at Their Posters', bullets: showcaseCategories },
         ],
@@ -620,6 +637,7 @@
     const modalKicker = document.getElementById('modalKicker');
     const modalTitle = document.getElementById('modalTitle');
     const modalBadges = document.getElementById('modalBadges');
+    const modalNote = document.getElementById('modalNote');
     const modalList = document.getElementById('modalList');
 
     let currentDay = 'day1';
@@ -699,6 +717,7 @@
       if (event.lang) top.appendChild(makeEl('span', 'badge lang', event.lang));
       card.appendChild(top);
       card.appendChild(makeEl('div', 'event-title', event.title));
+      if (event.note) card.appendChild(makeEl('div', 'event-note', event.note));
       if (event.area) card.appendChild(makeEl('div', 'event-area', event.area));
       if (event.bullets) {
         const ul = makeEl('ul', 'event-list');
@@ -756,6 +775,7 @@
         timeline.appendChild(line);
 
         const timeLabel = makeEl('div', 'time-label', label);
+        if (min === startMin) timeLabel.classList.add('is-first');
         timeLabel.style.gridColumn = '1';
         timeLabel.style.gridRow = String(row);
         timeline.appendChild(timeLabel);
@@ -782,6 +802,8 @@
         const badge = makeEl('span', `badge${idx === 1 && event.lang ? ' lang' : ''}`, text);
         modalBadges.appendChild(badge);
       });
+      modalNote.textContent = event.note || '';
+      modalNote.style.display = event.note ? 'block' : 'none';
       modalList.innerHTML = '';
       (event.bullets || []).forEach(item => modalList.appendChild(makeEl('li', '', item)));
       modalList.style.display = event.bullets?.length ? '' : 'none';
